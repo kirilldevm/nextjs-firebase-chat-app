@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# Real-Time Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time chat application built with **React** and **Firebase**. Authenticated users can browse users, start or continue chats, send text messages, share images, and use emojis—all with live updates.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Authentication** — Sign up and log in with email and password (Firebase Auth).
+- **Real-time messaging** — Send and receive messages instantly via Firestore listeners.
+- **Image sharing** — Attach and upload images to Firebase Storage; share image URLs in chat.
+- **Emoji picker** — Insert emojis into messages with a click-outside-to-close picker.
+- **Users & chats** — Sidebar with tabs: browse all users or your existing chatrooms.
+- **Chat list** — See last message and timestamp per chat; click to open a conversation.
+- **Responsive UI** — Tailwind CSS and DaisyUI for layout and components.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** + **TypeScript**
+- **Vite** — dev server and build
+- **React Router 7** — routing (public: login/register; private: home, chat)
+- **Firebase** — Auth, Firestore, Storage
+- **Tailwind CSS 4** + **DaisyUI**
+- **React Hook Form** + **Zod** — forms and validation
+- **Zustand** — client state (e.g. active tab)
+- **Sonner** — toasts
+- **Day.js** — message timestamps
+- **emoji-picker-react** — emoji picker
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Node.js** 18+
+- **npm** (or pnpm / yarn)
+- A **Firebase** project with Auth, Firestore, and Storage enabled
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. Clone and install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/kirilldevm/nextjs-firebase-chat-app
+cd react-firebase-realtime-chat-app
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Firebase setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Create a project at [Firebase Console](https://console.firebase.google.com).
+2. Enable **Authentication** (Email/Password sign-in).
+3. Create a **Firestore** database.
+4. Create a **Storage** bucket.
+5. Register a web app and copy the config object.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 3. Configure Firebase
+
+Put your Firebase config in [`src/lib/fitebase.ts`](src/lib/fitebase.ts) (replace the existing `firebaseConfig`):
+
+```ts
+const firebaseConfig = {
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_PROJECT.firebaseapp.com',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_PROJECT.firebasestorage.app',
+  messagingSenderId: '...',
+  appId: '...',
+};
 ```
+
+For production, use environment variables and avoid committing secrets.
+
+### 4. Run the app
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). Sign up, log in, then use the sidebar to switch between **Users** and **Chats** and open a conversation.
+
+## Scripts
+
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start Vite dev server    |
+| `npm run build`   | TypeScript check + build |
+| `npm run preview` | Preview production build |
+| `npm run lint`    | Run ESLint               |
+
+## Project Structure
+
+```
+src/
+├── components/     # UI (sidebar, chats, users, message-input, message-card, …)
+├── hooks/          # useAuth, useSendMessage, useGetMessagesByChatroomId, …
+├── layouts/        # PrivateLayout (auth required), PublicLayout (login/register)
+├── lib/            # Firebase init (fitebase.ts)
+├── pages/          # login, register, main-chat
+├── schemas/        # Zod schemas (e.g. auth)
+├── store/          # Zustand store
+├── types/          # TypeScript types (user, message, chatroom)
+├── App.tsx
+├── main.tsx        # Router + lazy-loaded pages
+└── index.css       # Tailwind + global styles
+```
+
+## Firestore / Storage usage
+
+- **Firestore**: `chatrooms/{id}` (metadata, `users`, `usersData`, `lastMessage`), `chatrooms/{id}/messages` (message docs).
+- **Storage**: `chatroom_images/` for uploaded images; image URLs are stored in message `image` and in `lastMessage` when applicable.

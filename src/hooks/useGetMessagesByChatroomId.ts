@@ -15,9 +15,10 @@ export function useGetMessagesByChatroomId(chatroomId: string) {
 
   useEffect(() => {
     setLoading(true);
+    if (!chatroomId) return;
     const messagesRef = query(
       collection(firestore, `chatrooms/${chatroomId}/messages`),
-      orderBy('createdAt', 'asc'),
+      orderBy('createdAt', 'desc'),
       limit(100)
     );
     const unsubscribe = onSnapshot(messagesRef, (snapshot) => {

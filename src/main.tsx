@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
@@ -5,9 +6,11 @@ import App from './App.tsx';
 import './index.css';
 import PrivateLayout from './layouts/private-layout.tsx';
 import PublicLayout from './layouts/public-layout.tsx';
-import Login from './pages/login.tsx';
-import MainChat from './pages/main-chat.tsx';
-import Register from './pages/register.tsx';
+
+const MainChatPage = lazy(() => import('./pages/main-chat.tsx'));
+
+const LoginPage = lazy(() => import('./pages/login.tsx'));
+const RegisterPage = lazy(() => import('./pages/register.tsx'));
 
 const router = createBrowserRouter([
   {
@@ -20,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/chat/:id',
-        element: <MainChat />,
+        element: <MainChatPage />,
       },
     ],
   },
@@ -30,11 +33,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/login',
-        element: <Login />,
+        element: <LoginPage />,
       },
       {
         path: '/register',
-        element: <Register />,
+        element: <RegisterPage />,
       },
     ],
   },
