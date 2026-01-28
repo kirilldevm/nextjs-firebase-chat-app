@@ -19,6 +19,7 @@ export default function MainChat() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!messages?.length || !ref.current) return;
     if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
   }, [messages, ref]);
 

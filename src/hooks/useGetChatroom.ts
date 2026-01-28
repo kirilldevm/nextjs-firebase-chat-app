@@ -8,8 +8,11 @@ export function useGetChatroom(id: string) {
   const [chatroom, setChatroom] = useState<TChatroom | undefined>(undefined);
 
   useEffect(() => {
-    if (!id) return;
     setIsLoading(true);
+    if (!id) {
+      setIsLoading(false);
+      return;
+    }
     const chatroomRef = doc(firestore, `chatrooms/${id}`);
     const unsubscribe = onSnapshot(chatroomRef, (snapshot) => {
       setChatroom(snapshot.data() as TChatroom);
