@@ -159,8 +159,9 @@ export default function MessageInput({ onSend }: MessageInputProps) {
             aria-label="Attach file"
             accept="image/*"
             onChange={(e) => {
-              handleFileChange(e);
-              // handleUploadFile();
+              if (e.target.files?.[0]) {
+                handleFileChange(e);
+              }
             }}
             className="hidden"
             ref={fileInputRef}
