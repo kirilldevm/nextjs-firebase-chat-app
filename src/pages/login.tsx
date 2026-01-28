@@ -23,13 +23,7 @@ export default function Login() {
 
   async function onSubmit(data: LoginSchema) {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-
-      const user = userCredential.user;
+      await signInWithEmailAndPassword(auth, data.email, data.password);
 
       toast.success('Logged in successfully');
       navigate('/');
@@ -46,7 +40,7 @@ export default function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4 w-full max-w-2xl h-max shadow-md p-4 rounded-lg border text-primary"
       >
-        <h1 className="text-2xl font-bold text-center">Register</h1>
+        <h1 className="text-2xl font-bold text-center">Login</h1>
 
         <div className="space-y-2">
           <label htmlFor="email" className="label text-sm font-semibold">
