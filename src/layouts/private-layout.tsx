@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router';
 import { Toaster } from 'sonner';
+import Sidebar from '../components/sidebar.tsx';
 import { useAuth } from '../hooks/useAuth.ts';
 
 export default function PrivateLayout() {
@@ -17,8 +18,9 @@ export default function PrivateLayout() {
     return <Navigate to="/login" />;
   }
   return (
-    <div>
+    <div className="flex flex-row h-screen w-screen overflow-hidden">
       <Toaster />
+      <Sidebar />
       <Outlet />
     </div>
   );

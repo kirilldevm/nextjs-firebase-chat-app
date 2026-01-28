@@ -6,6 +6,7 @@ import './index.css';
 import PrivateLayout from './layouts/private-layout.tsx';
 import PublicLayout from './layouts/public-layout.tsx';
 import Login from './pages/login.tsx';
+import MainChat from './pages/main-chat.tsx';
 import Register from './pages/register.tsx';
 
 const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <App />,
+      },
+      {
+        path: '/chat/:id',
+        element: <MainChat />,
       },
     ],
   },
