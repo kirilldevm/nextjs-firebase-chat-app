@@ -39,14 +39,27 @@ export default function MessageCard({ message, user }: MessageCardProps) {
       </div>
 
       <div
-        className={`flex flex-col p-2 rounded-lg ${isSender ? 'items-end bg-blue-500 text-white' : 'items-start bg-gray-200 text-black'} min-w-[100px]`}
+        className={`flex flex-col p-2 rounded-lg ${isSender ? 'items-end bg-blue-300/50 text-white' : 'items-start bg-gray-200 text-black'} min-w-[100px]`}
       >
+        {message.image && (
+          <div className="shrink-0 relative max-w-60 max-h-60 h-full rounded-lg overflow-hidden">
+            <img
+              src={message.image}
+              alt="Message image"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        )}
         <p
           className={`text-xs w-full text-gray-500 text-right ${isSender ? 'text-left text-white/80' : 'text-right'}`}
         >
           {timeAgo.toString()}
         </p>
-        <p>{message.content}</p>
+        <p
+          className={`whitespace-pre-wrap ${message.image ? 'text-center' : ''}`}
+        >
+          {message.content}
+        </p>
       </div>
     </li>
   );

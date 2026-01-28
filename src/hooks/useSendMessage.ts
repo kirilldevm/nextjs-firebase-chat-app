@@ -14,20 +14,19 @@ export function useSendMessage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  async function sendMessage(
-    message: Omit<TMessage, 'id' | 'createdAt'>,
-    chatroomId: string
-  ) {
+  async function sendMessage(message: Partial<TMessage>, chatroomId: string) {
     try {
       setIsLoading(true);
+      const messageData = {
+        content: message.content,
+        senderId: message.senderId,
+        receiverId: message.receiverId,
+        createdAt: serverTimestamp(),
+        ...(message.image != null && { image: message.image }),
+      };
       const messageRef = await addDoc(
         collection(firestore, `chatrooms/${chatroomId}/messages`),
-        {
-          content: message.content,
-          senderId: message.senderId,
-          receiverId: message.receiverId,
-          createdAt: serverTimestamp(),
-        }
+        messageData
       );
 
       const chatroomRef = doc(firestore, `chatrooms/${chatroomId}`);
@@ -38,6 +37,7 @@ export function useSendMessage() {
           senderId: message.senderId,
           receiverId: message.receiverId,
           createdAt: serverTimestamp(),
+          ...(message.image != null && { image: message.image }),
         },
       });
 
@@ -46,6 +46,7 @@ export function useSendMessage() {
       return messageRef.id;
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
+      console.log(error);
       setIsLoading(false);
       return null;
     }

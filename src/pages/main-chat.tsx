@@ -38,11 +38,13 @@ export default function MainChat() {
     );
   }
 
-  async function handleSendMessage(message: string) {
+  async function handleSendMessage(message: string, imageUrl: string | null) {
+    console.log(message, imageUrl);
     const messageData = {
       content: message,
       senderId: user?.uid as string,
       receiverId: chatroom!.users.find((userId) => userId !== user?.uid)!,
+      ...(imageUrl != null && { image: imageUrl }),
     };
     const messageId = await sendMessage(messageData, id as string);
     if (!messageId) {
