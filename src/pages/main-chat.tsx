@@ -57,13 +57,14 @@ export default function MainChat() {
       <div className="overflow-auto" ref={ref}>
         <div className="flex-1 p-10 gap-2 flex flex-col justify-end">
           <ul className="flex-1 gap-2 flex flex-col justify-end">
-            {messages.map((message) => (
-              <MessageCard
-                key={message.id}
-                message={message}
-                user={user as TUser}
-              />
-            ))}
+            {messages &&
+              messages.map((message) => (
+                <MessageCard
+                  key={message.id}
+                  message={message}
+                  user={user as TUser}
+                />
+              ))}
           </ul>
         </div>
       </div>
