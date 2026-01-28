@@ -41,6 +41,14 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '*',
+    element: (
+      <div className="flex font-bold text-2xl justify-center items-center h-screen">
+        404
+      </div>
+    ),
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
